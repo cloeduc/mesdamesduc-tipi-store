@@ -1,0 +1,55 @@
+{
+  "name": "OMEBis",
+  "id": "omebis",
+  "available": true,
+  "exposable": true,
+  "dynamic_config": true,
+  "port": 8730,
+  "tipi_version": 1,
+  "version": "0.1.0",
+  "min_tipi_version": "4.0.0",
+  "categories": ["utilities"],
+  "short_desc": "Observatoire des maisons d'éditions (SFFF)",
+  "description": "Annuaire des maisons d'édition de l'imaginaire — Next.js + Postgres. Exposer en ome.mesamesduc.fr via Cloudflare.",
+  "author": "Mesdames Duc",
+  "source": "https://github.com/cloeduc/OMEBis",
+  "website": "https://ome.mesdamesduc.fr",
+  "supported_architectures": ["arm64", "amd64"],
+  "created_at": 1756464000000,
+  "updated_at": 1756464000000,
+  "form_fields": [
+    {
+      "type": "random",
+      "label": "Mot de passe Postgres",
+      "env_variable": "OMEBIS_DB_PASSWORD",
+      "min": 24,
+      "required": true
+    },
+    {
+      "type": "text",
+      "label": "Image Docker OMEBis",
+      "hint": "Construite sur le Mac Mini: omebis:local — ou registry",
+      "env_variable": "OMEBIS_IMAGE",
+      "required": true,
+      "default": "omebis:local"
+    },
+    {
+      "type": "text",
+      "label": "Pappers API key (optionnel)",
+      "env_variable": "OMEBIS_PAPPERS_API_KEY",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "OpenAI API key (optionnel)",
+      "env_variable": "OMEBIS_OPENAI_API_KEY",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "AbstractAPI key scrape (optionnel)",
+      "env_variable": "OMEBIS_ABSTRACT_API_KEY",
+      "required": false
+    }
+  ]
+}

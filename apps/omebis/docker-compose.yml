@@ -1,0 +1,59 @@
+services:
+  omebis:
+    image: ${OMEBIS_IMAGE}
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - DATABASE_URL=postgresql://omebis:${OMEBIS_DB_PASSWORD}@omebis-db:5432/omebis?schema=public
+      - PAPPERS_API_KEY=${OMEBIS_PAPPERS_API_KEY}
+      - OPENAI_API_KEY=${OMEBIS_OPENAI_API_KEY}
+      - ABSTRACT_API_KEY=${OMEBIS_ABSTRACT_API_KEY}
+    depends_on:
+      omebis-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.submission.schedule: "0 2 * * *"
+      ofelia.job-exec.submission.command: "node -e \"console.log('[cron] SUBMISSION_CHECK', new Date().toISOString())\""
+      ofelia.job-exec.legal.schedule: "0 3 * * *"
+      ofelia.job-exec.legal.command: "node -e \"console.log('[cron] LEGAL_SYNC', new Date().toISOString())\""
+      ofelia.job-exec.diffusion.schedule: "0 4 * * 0"
+      ofelia.job-exec.diffusion.command: "node -e \"console.log('[cron] DIFFUSION_SYNC', new Date().toISOString())\""
+    x-runtipi:
+      is_main: true
+      internal_port: 3000
+
+  omebis-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - ${APP_DATA_DIR}/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=omebis
+      - POSTGRES_PASSWORD=${OMEBIS_DB_PASSWORD}
+      - POSTGRES_DB=omebis
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omebis -d omebis"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  omebis-ofelia:
+    image: mcuadros/ofelia:latest
+    restart: unless-stopped
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - omebis
+
+x-runtipi:
+  schema_version: 2
