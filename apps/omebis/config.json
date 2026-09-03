@@ -26,6 +26,27 @@
       "required": true
     },
     {
+      "type": "random",
+      "label": "Secret d’authentification",
+      "env_variable": "OMEBIS_AUTH_SECRET",
+      "min": 48,
+      "required": true
+    },
+    {
+      "type": "random",
+      "label": "Secret des tâches planifiées",
+      "env_variable": "OMEBIS_CRON_SECRET",
+      "min": 48,
+      "required": true
+    },
+    {
+      "type": "text",
+      "label": "URL publique",
+      "env_variable": "OMEBIS_PUBLIC_URL",
+      "required": true,
+      "default": "https://ome.mesdamesduc.fr"
+    },
+    {
       "type": "text",
       "label": "Image Docker OMEBis",
       "hint": "Construite sur le Mac Mini: omebis:local — ou registry",
@@ -41,14 +62,67 @@
     },
     {
       "type": "text",
+      "label": "Pappers API keys multiples (optionnel)",
+      "hint": "Séparées par des virgules",
+      "env_variable": "OMEBIS_PAPPERS_API_KEYS",
+      "required": false
+    },
+    {
+      "type": "text",
       "label": "OpenAI API key (optionnel)",
       "env_variable": "OMEBIS_OPENAI_API_KEY",
       "required": false
     },
     {
       "type": "text",
+      "label": "Modèle OpenAI",
+      "env_variable": "OMEBIS_OPENAI_MODEL",
+      "required": true,
+      "default": "gpt-5.6-luna"
+    },
+    {
+      "type": "text",
+      "label": "Effort de raisonnement OpenAI",
+      "hint": "none, low, medium ou high",
+      "env_variable": "OMEBIS_OPENAI_REASONING_EFFORT",
+      "required": true,
+      "default": "low"
+    },
+    {
+      "type": "text",
       "label": "AbstractAPI key scrape (optionnel)",
       "env_variable": "OMEBIS_ABSTRACT_API_KEY",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "SMTP — hôte (optionnel)",
+      "env_variable": "OMEBIS_SMTP_HOST",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "SMTP — port",
+      "env_variable": "OMEBIS_SMTP_PORT",
+      "required": false,
+      "default": "587"
+    },
+    {
+      "type": "text",
+      "label": "SMTP — utilisateur (optionnel)",
+      "env_variable": "OMEBIS_SMTP_USER",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "SMTP — mot de passe (optionnel)",
+      "env_variable": "OMEBIS_SMTP_PASS",
+      "required": false
+    },
+    {
+      "type": "text",
+      "label": "SMTP — expéditeur (optionnel)",
+      "env_variable": "OMEBIS_SMTP_FROM",
       "required": false
     }
   ]

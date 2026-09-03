@@ -7,9 +7,21 @@ services:
       - PORT=3000
       - HOSTNAME=0.0.0.0
       - DATABASE_URL=postgresql://omebis:${OMEBIS_DB_PASSWORD}@omebis-db:5432/omebis?schema=public
+      - AUTH_SECRET=${OMEBIS_AUTH_SECRET}
+      - AUTH_TRUST_HOST=true
+      - CRON_SECRET=${OMEBIS_CRON_SECRET}
+      - OMEBIS_PUBLIC_URL=${OMEBIS_PUBLIC_URL}
       - PAPPERS_API_KEY=${OMEBIS_PAPPERS_API_KEY}
+      - PAPPERS_API_KEYS=${OMEBIS_PAPPERS_API_KEYS}
       - OPENAI_API_KEY=${OMEBIS_OPENAI_API_KEY}
+      - OPENAI_MODEL=${OMEBIS_OPENAI_MODEL}
+      - OPENAI_REASONING_EFFORT=${OMEBIS_OPENAI_REASONING_EFFORT}
       - ABSTRACT_API_KEY=${OMEBIS_ABSTRACT_API_KEY}
+      - SMTP_HOST=${OMEBIS_SMTP_HOST}
+      - SMTP_PORT=${OMEBIS_SMTP_PORT}
+      - SMTP_USER=${OMEBIS_SMTP_USER}
+      - SMTP_PASS=${OMEBIS_SMTP_PASS}
+      - SMTP_FROM=${OMEBIS_SMTP_FROM}
     depends_on:
       omebis-db:
         condition: service_healthy
@@ -21,12 +33,14 @@ services:
       start_period: 40s
     labels:
       ofelia.enabled: "true"
-      ofelia.job-exec.submission.schedule: "0 2 * * *"
-      ofelia.job-exec.submission.command: "node -e \"console.log('[cron] SUBMISSION_CHECK', new Date().toISOString())\""
-      ofelia.job-exec.legal.schedule: "0 3 * * *"
-      ofelia.job-exec.legal.command: "node -e \"console.log('[cron] LEGAL_SYNC', new Date().toISOString())\""
-      ofelia.job-exec.diffusion.schedule: "0 4 * * 0"
-      ofelia.job-exec.diffusion.command: "node -e \"console.log('[cron] DIFFUSION_SYNC', new Date().toISOString())\""
+      ofelia.job-exec.submission.schedule: "0 0 2 * * *"
+      ofelia.job-exec.submission.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/SUBMISSION_CHECK'
+      ofelia.job-exec.legal.schedule: "0 0 3 * * *"
+      ofelia.job-exec.legal.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/LEGAL_SYNC'
+      ofelia.job-exec.edistat.schedule: "0 30 3 * * *"
+      ofelia.job-exec.edistat.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/EDISTAT_SYNC'
+      ofelia.job-exec.diffusion.schedule: "0 0 4 * * 0"
+      ofelia.job-exec.diffusion.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/DIFFUSION_SYNC'
     x-runtipi:
       is_main: true
       internal_port: 3000
