@@ -1,6 +1,7 @@
 services:
   omebis:
     image: ${OMEBIS_IMAGE}
+    pull_policy: never
     restart: unless-stopped
     environment:
       - NODE_ENV=production
