@@ -65,6 +65,8 @@ services:
     image: mcuadros/ofelia:latest
     restart: unless-stopped
     command: daemon --docker
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
