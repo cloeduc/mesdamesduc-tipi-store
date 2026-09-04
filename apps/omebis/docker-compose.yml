@@ -35,13 +35,13 @@ services:
     labels:
       ofelia.enabled: "true"
       ofelia.job-exec.submission.schedule: "0 0 2 * * *"
-      ofelia.job-exec.submission.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/SUBMISSION_CHECK'
+      ofelia.job-exec.submission.command: 'sh -c "curl -fsS --max-time 290 -X POST -H \"Authorization: Bearer $$CRON_SECRET\" http://127.0.0.1:3000/api/cron/SUBMISSION_CHECK"'
       ofelia.job-exec.legal.schedule: "0 0 3 * * *"
-      ofelia.job-exec.legal.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/LEGAL_SYNC'
+      ofelia.job-exec.legal.command: 'sh -c "curl -fsS --max-time 290 -X POST -H \"Authorization: Bearer $$CRON_SECRET\" http://127.0.0.1:3000/api/cron/LEGAL_SYNC"'
       ofelia.job-exec.edistat.schedule: "0 30 3 * * *"
-      ofelia.job-exec.edistat.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/EDISTAT_SYNC'
+      ofelia.job-exec.edistat.command: 'sh -c "curl -fsS --max-time 290 -X POST -H \"Authorization: Bearer $$CRON_SECRET\" http://127.0.0.1:3000/api/cron/EDISTAT_SYNC"'
       ofelia.job-exec.diffusion.schedule: "0 0 4 * * 0"
-      ofelia.job-exec.diffusion.command: 'curl -fsS --max-time 290 -X POST -H "Authorization: Bearer $${CRON_SECRET}" http://127.0.0.1:3000/api/cron/DIFFUSION_SYNC'
+      ofelia.job-exec.diffusion.command: 'sh -c "curl -fsS --max-time 290 -X POST -H \"Authorization: Bearer $$CRON_SECRET\" http://127.0.0.1:3000/api/cron/DIFFUSION_SYNC"'
     x-runtipi:
       is_main: true
       internal_port: 3000
